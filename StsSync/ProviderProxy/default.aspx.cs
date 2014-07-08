@@ -21,14 +21,13 @@ namespace ProviderProxy
         protected void Page_Load(object sender, EventArgs e)
         {
             ProviderManager pm = new ProviderManager();
-            List<Provider> providers = pm.GetAllProviders();
+            var providers = pm.GetAllIProviders();
 
             StringBuilder sb = new StringBuilder();
             panel1.Controls.Clear();
-            foreach (Provider provider in providers)
+            foreach (IProvider provider in providers)
             {
-                IProvider iProv = (IProvider)provider.GetIProvider();
-                ListType listType = iProv.GetProviderType(provider.ID);
+                ListType listType = provider.GetProviderType(provider.ID);
 
                 sb.Append("<a href=\"");
                 sb.Append("stssync://sts/?ver=1.1");
