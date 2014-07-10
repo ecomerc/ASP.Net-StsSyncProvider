@@ -7,6 +7,8 @@ using System.Collections;
 using System.Xml;
 using System.Collections.Specialized;
 using System.Reflection;
+using System.Web;
+using System.Text;
 
 namespace ProviderProxy
 {
@@ -31,6 +33,31 @@ namespace ProviderProxy
 
         }
 
+        public static string GetStsUrl(Guid id, string siteName, Uri baseUrl) {
+            ProviderManager pm = new ProviderManager();
+            // var providers = pm.GetAllIProviders();
+            StringBuilder sb = new StringBuilder();
+            IProvider provider = pm.GetIProvider(id);
+            ListType listType = provider.GetProviderType(id);
+
+            sb.Append("stssync://sts/?ver=1.1");
+            sb.Append("&type=" + listType.ToString().ToLower());
+            sb.Append("&cmd=add-folder");
+            sb.Append("&base-url=" + StsEncode(baseUrl.AbsoluteUri));
+            sb.Append("&list-url=" + StsEncode("/Lists/id" + id.ToString("N") + "/"));
+            sb.Append("&guid=" + StsEncode(provider.ID.ToString("B")));
+            sb.Append("&site-name=" + StsEncode(siteName));
+            sb.Append("&list-name=" + StsEncode(provider.Name));
+            return sb.ToString();
+        }
+
+        private static string StsEncode(string input) {
+            string output = input;
+            output = HttpUtility.UrlEncode(output);
+            output = output.Replace("+", "%20");
+            output = output.Replace("-", "%2D");
+            return output;
+        }
 
         public static XmlElement DataSetToDataNode(XmlElement parentElement, IEnumerable<object> wssDS, ListType listType, string requestThread)
         {

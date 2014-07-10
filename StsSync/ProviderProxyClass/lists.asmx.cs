@@ -143,59 +143,8 @@ namespace ProviderProxy {
 
         }
 
-        private XmlElement NewElement(XmlElement parentElement, string nodeName, string innerXml) {
-            XmlElement retElement = NewElement(parentElement, nodeName, null, true);
-            if (innerXml != null) {
-                retElement.InnerText = innerXml;
-            }
-            return retElement;
-        }
-        private XmlElement NewElement(XmlElement parentElement, string nodeName, XmlElement refNode, bool appearBefore) {
-            XmlElement retElement = NewElement(parentElement, nodeName);
-            if (refNode != null) {
-                if (appearBefore)
-                    parentElement.InsertBefore(retElement, refNode);
-                else
-                    parentElement.InsertAfter(retElement, refNode);
-            } else {
-                parentElement.AppendChild(retElement);
-            }
-            return retElement;
-        }
-        private XmlElement NewElement(XmlElement parentElement, string nodeName) {
-            return parentElement.OwnerDocument.CreateElement(nodeName, parentElement.NamespaceURI);
-        }
-
 
         public System.Xml.XmlNode GetListAndView(string listName, string viewName) {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteList(string listName) {
-            throw new NotImplementedException();
-        }
-
-        public System.Xml.XmlNode AddList(string listName, string description, int templateID) {
-            throw new NotImplementedException();
-        }
-
-        public System.Xml.XmlNode AddListFromFeature(string listName, string description, Guid featureID, int templateID) {
-            throw new NotImplementedException();
-        }
-
-        public System.Xml.XmlNode UpdateList(string listName, System.Xml.XmlNode listProperties, System.Xml.XmlNode newFields, System.Xml.XmlNode updateFields, System.Xml.XmlNode deleteFields, string listVersion) {
-            throw new NotImplementedException();
-        }
-
-        public System.Xml.XmlNode GetListCollection() {
-            throw new NotImplementedException();
-        }
-
-        public System.Xml.XmlNode GetListItems(string listName, string viewName, System.Xml.XmlNode query, System.Xml.XmlNode viewFields, string rowLimit, System.Xml.XmlNode queryOptions, string webID) {
-            throw new NotImplementedException();
-        }
-
-        public System.Xml.XmlNode GetListItemChanges(string listName, System.Xml.XmlNode viewFields, string since, System.Xml.XmlNode contains) {
             throw new NotImplementedException();
         }
 
@@ -447,6 +396,63 @@ namespace ProviderProxy {
 
         }
 
+        #region XML Function
+
+        private XmlElement NewElement(XmlElement parentElement, string nodeName, string innerXml) {
+            XmlElement retElement = NewElement(parentElement, nodeName, null, true);
+            if (innerXml != null) {
+                retElement.InnerText = innerXml;
+            }
+            return retElement;
+        }
+        private XmlElement NewElement(XmlElement parentElement, string nodeName, XmlElement refNode, bool appearBefore) {
+            XmlElement retElement = NewElement(parentElement, nodeName);
+            if (refNode != null) {
+                if (appearBefore)
+                    parentElement.InsertBefore(retElement, refNode);
+                else
+                    parentElement.InsertAfter(retElement, refNode);
+            } else {
+                parentElement.AppendChild(retElement);
+            }
+            return retElement;
+        }
+        private XmlElement NewElement(XmlElement parentElement, string nodeName) {
+            return parentElement.OwnerDocument.CreateElement(nodeName, parentElement.NamespaceURI);
+        }
+
+        #endregion
+       
+        #region Not Implemented
+        
+        public void DeleteList(string listName) {
+            throw new NotImplementedException();
+        }
+
+        public System.Xml.XmlNode AddList(string listName, string description, int templateID) {
+            throw new NotImplementedException();
+        }
+
+        public System.Xml.XmlNode AddListFromFeature(string listName, string description, Guid featureID, int templateID) {
+            throw new NotImplementedException();
+        }
+
+        public System.Xml.XmlNode UpdateList(string listName, System.Xml.XmlNode listProperties, System.Xml.XmlNode newFields, System.Xml.XmlNode updateFields, System.Xml.XmlNode deleteFields, string listVersion) {
+            throw new NotImplementedException();
+        }
+
+        public System.Xml.XmlNode GetListCollection() {
+            throw new NotImplementedException();
+        }
+
+        public System.Xml.XmlNode GetListItems(string listName, string viewName, System.Xml.XmlNode query, System.Xml.XmlNode viewFields, string rowLimit, System.Xml.XmlNode queryOptions, string webID) {
+            throw new NotImplementedException();
+        }
+
+        public System.Xml.XmlNode GetListItemChanges(string listName, System.Xml.XmlNode viewFields, string since, System.Xml.XmlNode contains) {
+            throw new NotImplementedException();
+        }
+
         public System.Xml.XmlNode AddDiscussionBoardItem(string listName, byte[] message) {
             throw new NotImplementedException();
         }
@@ -514,6 +520,8 @@ namespace ProviderProxy {
         public System.Xml.XmlNode ApplyContentTypeToList(string webUrl, string contentTypeId, string listName) {
             throw new NotImplementedException();
         }
+
+        #endregion
 
         #endregion
     }

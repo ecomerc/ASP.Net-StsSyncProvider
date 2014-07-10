@@ -5,6 +5,8 @@ using System.Text;
 using ProviderProxy;
 using System.Data;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Web;
 
 namespace AdventureWorksProvider {
     public class Contacts : IProvider {
@@ -13,6 +15,7 @@ namespace AdventureWorksProvider {
 
         public Guid ID {
             get {
+                Debug.WriteLine(HttpContext.Current.Request.Path);
                 return new Guid("7765B84F-6D32-4d31-B28E-6BC615D2F187");
             }
         }

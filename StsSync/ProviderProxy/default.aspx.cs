@@ -28,28 +28,14 @@ namespace ProviderProxy
             foreach (IProvider provider in providers)
             {
                 ListType listType = provider.GetProviderType(provider.ID);
-
+                Uri baseUrl = new Uri(Request.Url.Scheme + "://" + Request.Url.Host + ":" + Request.Url.Port);
                 sb.Append("<a href=\"");
-                sb.Append("stssync://sts/?ver=1.1");
-                sb.Append("&type=" + listType.ToString().ToLower());
-                sb.Append("&cmd=add-folder");
-                sb.Append("&base-url=" + StsEncode(Request.Url.Scheme + "://" + Request.Url.Host + ":" + Request.Url.Port));
-                sb.Append("&list-url=" + StsEncode("/Lists/id" + provider.ID.ToString("N") + "/"));
-                sb.Append("&guid=" + StsEncode(provider.ID.ToString("B")));
-                sb.Append("&site-name=StsSync%20Providers");
-                sb.Append("&list-name=" + StsEncode(provider.Name));
+                sb.Append(ListsHelper.GetStsUrl(provider.ID, "Sts Sync", baseUrl));
                 sb.Append("\">" + provider.Name + "</a>");
                 sb.Append("<br/>");
             }
             panel1.Controls.Add(new LiteralControl(sb.ToString()));
         }
-        private string StsEncode(string input)
-        {
-            string output = input;
-            output = HttpUtility.UrlEncode(output);
-            output = output.Replace("+", "%20");
-            output = output.Replace("-", "%2D");
-            return output;
-        }
+
     }
 }

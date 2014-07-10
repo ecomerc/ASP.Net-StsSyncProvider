@@ -185,6 +185,9 @@ namespace ProviderProxy
             {
                 case "bool":
                 case "boolean":
+                    if (string.IsNullOrEmpty(val.ToString()))
+                        return (T)(object)false;
+
                     return (T)(object)bool.Parse(val.ToString());
                 case "datetime":
                     return (T)(object)DateTime.Parse(val.ToString());

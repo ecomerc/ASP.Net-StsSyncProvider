@@ -8,7 +8,6 @@ using System.Web.Hosting;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Xml.Linq;
-using VirtualPathProvider;
 
 namespace ProviderProxy
 {
@@ -16,7 +15,7 @@ namespace ProviderProxy
     {
 
         protected void Application_Start(object sender, EventArgs e) {
-            MasterPageVirtualPathProvider vpp = new MasterPageVirtualPathProvider();
+            ProxyVirtualPathProvider vpp = new ProxyVirtualPathProvider();
             HostingEnvironment.RegisterVirtualPathProvider(vpp);
 
             ProviderProxy.ProviderManager.RegisterProvider(new AdventureWorksProvider.Contacts());
