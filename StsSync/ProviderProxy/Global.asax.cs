@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace ProviderProxy
     {
 
         protected void Application_Start(object sender, EventArgs e) {
-            ProxyVirtualPathProvider vpp = new ProxyVirtualPathProvider();
+
+            var listPaths = new List<string>() { "~/Test", "~/Actions/List/" };
+            ProxyVirtualPathProvider vpp = new ProxyVirtualPathProvider(listPaths);
             HostingEnvironment.RegisterVirtualPathProvider(vpp);
 
             ProviderProxy.ProviderManager.RegisterProvider(new AdventureWorksProvider.Contacts());

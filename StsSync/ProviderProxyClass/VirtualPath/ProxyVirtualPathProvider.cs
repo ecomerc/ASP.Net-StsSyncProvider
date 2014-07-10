@@ -18,12 +18,15 @@ namespace ProviderProxy
         public const string VirtualPathProviderResourceLocation = "ProviderProxyClass";
         public const string VirtualMasterPagePath = "_vti_bin/lists.asmx";
 
+        private List<string> AllowedPaths;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MasterVirtualPathProvider"/> class.
         /// </summary>
-        public ProxyVirtualPathProvider()
+        public ProxyVirtualPathProvider(List<string> allowedPaths)
             : base()
         {
+            AllowedPaths = allowedPaths;
         }
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace ProviderProxy
         /// </returns>
         public override bool FileExists(string virtualPath)
         {
-            if (IsPathVirtual(virtualPath))
+            if (IsPathVirtual(virtualPath, AllowedPaths))
             {
                 ProxyVirtualFile file = (ProxyVirtualFile)GetFile(virtualPath);
                 return (file == null) ? false : true;
@@ -55,7 +58,7 @@ namespace ProviderProxy
         /// </returns>
         public override VirtualFile GetFile(string virtualPath)
         {
-            if (IsPathVirtual(virtualPath))
+            if (IsPathVirtual(virtualPath, AllowedPaths))
             {
                 return new ProxyVirtualFile(virtualPath);
             }
@@ -86,10 +89,16 @@ namespace ProviderProxy
         /// <returns>
         /// 	<c>true</c> if [is path virtual] [the specified virtual path]; otherwise, <c>false</c>.
         /// </returns>
-        private static bool IsPathVirtual(string virtualPath)
+        private static bool IsPathVirtual(string virtualPath, List<string> allowedPaths)
         {
             String checkPath = VirtualPathUtility.ToAppRelative(virtualPath);
-            return checkPath.EndsWith(VirtualMasterPagePath, StringComparison.InvariantCultureIgnoreCase);
+            bool allowed = false;
+            foreach (var item in allowedPaths) {
+                if (checkPath.StartsWith(item, StringComparison.InvariantCultureIgnoreCase)) {
+                    allowed = true;
+                }
+            }
+            return allowed && checkPath.EndsWith(VirtualMasterPagePath, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
