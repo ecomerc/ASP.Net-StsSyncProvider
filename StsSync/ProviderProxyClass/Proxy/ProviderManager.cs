@@ -15,9 +15,9 @@ namespace ProviderProxy {
         public static void RegisterProvider(IProvider provider) {
             _providers.Add(provider.ID, provider);
 
-            Debug.WriteLine(ListsHelper.GetFieldsForListType(ListType.Tasks));
+            Debug.WriteLine(ListsHelper.GetFieldsForListType(ListType.Calendar));
 
-            foreach (var item in ListsHelper.GetFieldsForListType(ListType.Tasks)) {
+            foreach (var item in ListsHelper.GetFieldsForListType(ListType.Calendar)) {
                 Debug.WriteLine(item.Name + " : " + item.OWSName + " : " + item.Type + " : " + item.ReadOnly);
 
             }

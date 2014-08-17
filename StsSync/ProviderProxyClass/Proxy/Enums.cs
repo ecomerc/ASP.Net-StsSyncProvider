@@ -1,8 +1,9 @@
 ﻿public enum ListType
 {
     Contacts,
-    Events,
+    Calendar,
     Tasks,
     Documents,
     DiscussionList
 }
+//"calendar", "contacts", "discussions", "documents", or "tasks"

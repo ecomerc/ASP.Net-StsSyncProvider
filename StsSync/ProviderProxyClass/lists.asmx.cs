@@ -171,7 +171,7 @@ namespace ProviderProxy {
             ListType listType = iProv.GetProviderType(listId);
             StringDictionary fieldMappings = iProv.GetFieldMappingsForListType(listId, listType);
 
-            int intRowLimit = (null == rowLimit) ? 0 : Int32.Parse(rowLimit);
+            int intRowLimit = (null == rowLimit) ? 100 : Int32.Parse(rowLimit);
             int startRow = 0;
             string requestThread = null;
             if (queryOptions != null) {
@@ -284,7 +284,7 @@ namespace ProviderProxy {
                         try //to get the ID -- won't be there for the "New" method.
                         {
                             id = int.Parse(xelIDField.InnerText);
-                        } catch (FormatException ex) {
+                        } catch (FormatException) {
                             id = 0;
                         }
                     }

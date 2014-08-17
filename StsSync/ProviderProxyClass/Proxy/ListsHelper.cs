@@ -41,10 +41,10 @@ namespace ProviderProxy
             ListType listType = provider.GetProviderType(id);
 
             sb.Append("stssync://sts/?ver=1.1");
-            sb.Append("&type=" + listType.ToString().ToLower());
+            sb.Append("&type=" + StsEncode(listType.ToString().ToLower()));
             sb.Append("&cmd=add-folder");
             sb.Append("&base-url=" + StsEncode(baseUrl.AbsoluteUri));
-            sb.Append("&list-url=" + StsEncode("/Lists/id" + id.ToString("N") + "/"));
+            sb.Append("&list-url=" + StsEncode("/"));
             sb.Append("&guid=" + StsEncode(provider.ID.ToString("B")));
             sb.Append("&site-name=" + StsEncode(siteName));
             sb.Append("&list-name=" + StsEncode(provider.Name));
@@ -66,32 +66,35 @@ namespace ProviderProxy
 
         public static XmlElement DataSetToDataNode(XmlElement parentElement, IEnumerable<object> wssDS,ListType listType,  int rowLimit,int startRow,string requestThread)
         {
-            const int MAX_ROWS = 10000;
-            
-            XmlElement dataNode = parentElement.OwnerDocument.CreateElement("rs","data", "urn:schemas-microsoft-com:rowset");
-            parentElement.AppendChild(dataNode);
-            
-            List<Field> fieldList = GetFieldsForListType(listType);
+            if (wssDS != null) {
+                const int MAX_ROWS = 10000;
 
-            
-            int rowCount = Math.Min(MAX_ROWS, rowLimit); //ensure we don't go over hardcoded limit
-            rowCount = Math.Min(wssDS.Count(), rowCount); //don't go over the number of rows in the set
-            //rowCount = Math.Max((rowCount - startRow),0); //back out the rows we're skipping but ensure at least 0
+                XmlElement dataNode = parentElement.OwnerDocument.CreateElement("rs", "data", "urn:schemas-microsoft-com:rowset");
+                parentElement.AppendChild(dataNode);
 
-            dataNode.SetAttribute("ItemCount", rowCount.ToString() );
-            System.Diagnostics.Debug.Print("DataSetToDataNode: rowCount = " + rowCount.ToString());
-            System.Diagnostics.Debug.Print("DataSetToDataNode: startRow = " + startRow.ToString());
+                List<Field> fieldList = GetFieldsForListType(listType);
 
-            foreach (var item in wssDS.Skip(startRow).Take(rowCount).Select(x => x)) {
-                XmlElement zRow = CreateZRow(dataNode, fieldList, null, item);
-                dataNode.AppendChild(zRow);
+
+                int rowCount = Math.Min(MAX_ROWS, rowLimit); //ensure we don't go over hardcoded limit
+                rowCount = Math.Min(wssDS.Count(), rowCount); //don't go over the number of rows in the set
+                //rowCount = Math.Max((rowCount - startRow),0); //back out the rows we're skipping but ensure at least 0
+
+                dataNode.SetAttribute("ItemCount", rowCount.ToString());
+                System.Diagnostics.Debug.Print("DataSetToDataNode: rowCount = " + rowCount.ToString());
+                System.Diagnostics.Debug.Print("DataSetToDataNode: startRow = " + startRow.ToString());
+
+                foreach (var item in wssDS.Skip(startRow).Take(rowCount).Select(x => x)) {
+                    XmlElement zRow = CreateZRow(dataNode, fieldList, null, item);
+                    dataNode.AppendChild(zRow);
+                }
+
+                if ((rowCount + startRow) < (wssDS.Count())) {
+                    dataNode.SetAttribute("ListItemCollectionPositionNext", requestThread + "&" + (rowCount + startRow).ToString());
+                }
+                return dataNode;
+            } else {
+                return null;
             }
-
-            if ((rowCount + startRow) < (wssDS.Count()))
-            {
-                dataNode.SetAttribute("ListItemCollectionPositionNext", requestThread + "&" + (rowCount + startRow).ToString());
-            }
-            return dataNode;
         }
 
         public static XmlElement CreateZRow(XmlElement dataNode, List<Field> fieldList, StringDictionary fieldMappings, object dr) {
@@ -153,7 +156,7 @@ namespace ProviderProxy
                 case ListType.Contacts:
                     return MergeArrays(COMMON_FIELDS,CONTACT_FIELDS);
 
-                case ListType.Events:
+                case ListType.Calendar:
                     return MergeArrays(COMMON_FIELDS,CALENDAR_FIELDS);
 
                 case ListType.Tasks:
@@ -251,7 +254,7 @@ namespace ProviderProxy
                 case ListType.Contacts:
                     listElement.SetAttribute("ServerTemplate", "105");
                     break;
-                case ListType.Events:
+                case ListType.Calendar:
                     listElement.SetAttribute("ServerTemplate", "106");
                     break;
                 case ListType.Tasks:
