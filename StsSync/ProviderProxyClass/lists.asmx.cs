@@ -228,7 +228,7 @@ namespace ProviderProxy {
 
             XmlElement xelChanges = NewElement(listItems, "Changes", null, true);
             xelChanges.SetAttribute("LastChangeToken", new ChangeKey(1, 3, iProv.ID, DateTime.Now, 1).ToString());
-
+            Debug.WriteLine(xelChanges.OuterXml);
 
             XmlElement xelDataNode = ListsHelper.DataSetToDataNode(listItems, wssDS, listType, intRowLimit, startRow, requestThread);
             if (xelDataNode.HasAttribute("ListItemCollectionPositionNext")) {
