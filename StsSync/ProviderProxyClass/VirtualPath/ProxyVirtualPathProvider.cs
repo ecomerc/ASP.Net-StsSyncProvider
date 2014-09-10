@@ -7,13 +7,11 @@ using System.Text;
 using System.Web;
 using System.Web.Hosting;
 
-namespace ProviderProxy
-{
+namespace ProviderProxy {
     /// <summary>
     /// Master Page Virtual Path Provider
     /// </summary>
-    public class ProxyVirtualPathProvider : System.Web.Hosting.VirtualPathProvider
-    {
+    public class ProxyVirtualPathProvider : System.Web.Hosting.VirtualPathProvider {
         //public const string MasterPageFileLocation = "~/Virt/Service.asmx";
         public const string VirtualPathProviderResourceLocation = "ProviderProxyClass";
         public const string VirtualMasterPagePath = "_vti_bin/lists.asmx";
@@ -24,8 +22,7 @@ namespace ProviderProxy
         /// Initializes a new instance of the <see cref="MasterVirtualPathProvider"/> class.
         /// </summary>
         public ProxyVirtualPathProvider(List<string> allowedPaths)
-            : base()
-        {
+            : base() {
             AllowedPaths = allowedPaths;
         }
 
@@ -36,15 +33,11 @@ namespace ProviderProxy
         /// <returns>
         /// true if the file exists in the virtual file system; otherwise, false.
         /// </returns>
-        public override bool FileExists(string virtualPath)
-        {
-            if (IsPathVirtual(virtualPath, AllowedPaths))
-            {
+        public override bool FileExists(string virtualPath) {
+            if (IsPathVirtual(virtualPath, AllowedPaths)) {
                 ProxyVirtualFile file = (ProxyVirtualFile)GetFile(virtualPath);
                 return (file == null) ? false : true;
-            }
-            else
-            {
+            } else {
                 return Previous.FileExists(virtualPath);
             }
         }
@@ -56,14 +49,10 @@ namespace ProviderProxy
         /// <returns>
         /// A descendent of the <see cref="T:System.Web.Hosting.VirtualFile"></see> class that represents a file in the virtual file system.
         /// </returns>
-        public override VirtualFile GetFile(string virtualPath)
-        {
-            if (IsPathVirtual(virtualPath, AllowedPaths))
-            {
+        public override VirtualFile GetFile(string virtualPath) {
+            if (IsPathVirtual(virtualPath, AllowedPaths)) {
                 return new ProxyVirtualFile(virtualPath);
-            }
-            else
-            {
+            } else {
                 return Previous.GetFile(virtualPath);
             }
         }
@@ -77,8 +66,7 @@ namespace ProviderProxy
         /// <returns>
         /// A <see cref="T:System.Web.Caching.CacheDependency"></see> object for the specified virtual resources.
         /// </returns>
-        public override System.Web.Caching.CacheDependency GetCacheDependency(string virtualPath, IEnumerable virtualPathDependencies, DateTime utcStart)
-        {
+        public override System.Web.Caching.CacheDependency GetCacheDependency(string virtualPath, IEnumerable virtualPathDependencies, DateTime utcStart) {
             return null;
         }
 
@@ -89,8 +77,7 @@ namespace ProviderProxy
         /// <returns>
         /// 	<c>true</c> if [is path virtual] [the specified virtual path]; otherwise, <c>false</c>.
         /// </returns>
-        private static bool IsPathVirtual(string virtualPath, List<string> allowedPaths)
-        {
+        private static bool IsPathVirtual(string virtualPath, List<string> allowedPaths) {
             String checkPath = VirtualPathUtility.ToAppRelative(virtualPath);
             bool allowed = false;
             foreach (var item in allowedPaths) {

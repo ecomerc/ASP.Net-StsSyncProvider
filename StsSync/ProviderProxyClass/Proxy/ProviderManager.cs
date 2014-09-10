@@ -8,19 +8,20 @@ using System.Collections;
 using System.Diagnostics;
 
 namespace ProviderProxy {
-    public class ProviderManager  {
+    public class ProviderManager {
 
         private static Dictionary<Guid, IProvider> _providers = new Dictionary<Guid, IProvider>();
 
         public static void RegisterProvider(IProvider provider) {
             _providers.Add(provider.ID, provider);
 
+            /*
             Debug.WriteLine(ListsHelper.GetFieldsForListType(ListType.Calendar));
 
             foreach (var item in ListsHelper.GetFieldsForListType(ListType.Calendar)) {
                 Debug.WriteLine(item.Name + " : " + item.OWSName + " : " + item.Type + " : " + item.ReadOnly);
 
-            }
+            }*/
         }
 
         internal IProvider GetIProvider(Guid id) {
