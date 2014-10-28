@@ -124,16 +124,18 @@ namespace ProviderProxy
                         fld.Value = drd[fieldName];
                         zRow.SetAttribute(attribName, fld.GetValue().Trim());
                     } else {
-                        zRow.SetAttribute(attribName, string.Empty);
+                        //zRow.SetAttribute(attribName, string.Empty);
                     }
                 } else {
                     PropertyInfo pi = dr.GetType().GetProperty(fieldName);
                     if (pi != null) {
                         fld.Value = pi.GetValue(dr, null);
                         //dr[fieldName];
-                        zRow.SetAttribute(attribName, fld.GetValue().Trim());
+                        if (fld.Value != null) {
+                            zRow.SetAttribute(attribName, fld.GetValue().Trim());
+                        }
                     } else {
-                        zRow.SetAttribute(attribName, string.Empty);
+                        //zRow.SetAttribute(attribName, string.Empty);
                     }
                 }
             }
@@ -274,7 +276,7 @@ namespace ProviderProxy
         static readonly string[][] COMMON_FIELDS = new string[][]{
             new string[] {"{1d22ea11-1e32-424e-89ab-9fedbadb6ce1}", "ID", "ID", "ID", "Counter", "TRUE"}, 
             new string[] {"{03e45e84-1992-4d42-9116-26f756012634}", "ContentTypeId", "ContentTypeId", "Content Type ID", "ContentTypeId", "TRUE"}, 
-            new string[] {"{c042a256-787d-4a6f-8a8a-cf6ab767f12d}", "ContentType", "ContentType", "Content Type", "Text", "TRUE"}, 
+            //new string[] {"{c042a256-787d-4a6f-8a8a-cf6ab767f12d}", "ContentType", "ContentType", "Content Type", "Text", "TRUE"}, 
             new string[] {"{28cf69c5-fa48-462a-b5cd-27b6f9d2bd5f}", "Modified", "Modified", "Modified", "DateTime", "TRUE"}, 
             new string[] {"{8c06beca-0777-48f7-91c7-6da68bc07b69}", "Created", "Created", "Created", "DateTime", "TRUE"}, 
             new string[] {"{1df5e554-ec7e-46a6-901d-d85a3881cb18}", "Author", "Author", "Created By", "User", "TRUE"}, 
