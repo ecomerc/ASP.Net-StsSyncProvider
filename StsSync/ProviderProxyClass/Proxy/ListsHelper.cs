@@ -33,7 +33,7 @@ namespace ProviderProxy
 
         }
 
-        public static string GetStsUrl(Guid id, string siteName, Uri baseUrl) {
+        public static string GetStsUrl(Guid id, string siteName, string calendarName, Uri baseUrl) {
             ProviderManager pm = new ProviderManager();
             // var providers = pm.GetAllIProviders();
             StringBuilder sb = new StringBuilder();
@@ -47,7 +47,7 @@ namespace ProviderProxy
             sb.Append("&list-url=" + StsEncode("/"));
             sb.Append("&guid=" + StsEncode(provider.ID.ToString("B")));
             sb.Append("&site-name=" + StsEncode(siteName));
-            sb.Append("&list-name=" + StsEncode(provider.Name));
+            sb.Append("&list-name=" + StsEncode(calendarName));
             return sb.ToString();
         }
 
