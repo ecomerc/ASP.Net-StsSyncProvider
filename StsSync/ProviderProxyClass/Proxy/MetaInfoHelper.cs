@@ -46,7 +46,7 @@ namespace ProviderProxy
             {
                 xDoc.LoadXml(dr[METAINFO].ToString());
             }
-            catch(XmlException exml) { return null; }
+            catch(XmlException) { return null; }
 
             return xDoc.DocumentElement;
         }

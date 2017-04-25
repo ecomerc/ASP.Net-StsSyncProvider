@@ -24,6 +24,23 @@ namespace ProviderProxy {
     public class WebService1 : System.Web.Services.WebService, IListsSoap {
         public static readonly Guid WEB_ID = new Guid("{409F0498-67EA-4120-B5AC-A7FE87828967}");
 
+        private void SetHeaders() {
+            var response = HttpContext.Current.Response;
+            response.AddHeader("MicrosoftSharePointTeamServices", "14.0.0.7015");
+            response.AddHeader("X-MS-InvokeApp", "1; RequireReadOnly");
+            response.AddHeader("SPRequestGuid", Guid.NewGuid().ToString("D"));
+            /*
+                SPRequestGuid: 2f601fe5-8278-4094-9b90-ae62c1b2eca8
+                X-AspNet-Version: 2.0.50727
+                Persistent-Auth: true
+                X-Powered-By: ASP.NET
+                MicrosoftSharePointTeamServices: 14.0.0.7015
+                X-MS-InvokeApp: 1; RequireReadOnly
+                 */
+
+        }
+
+
         [WebMethod()]
         public string ATestMethod() {
 
@@ -68,9 +85,11 @@ namespace ProviderProxy {
         }
         #region IListsSoap Members
 
-
+        
 
         public System.Xml.XmlNode GetList(string listName) {
+
+            
             //List name should correspond to the provider ID if the stssync link was constructed correctly.
             Guid listId = new Guid(listName); //we'll just crash if it's not a Guid
             XmlElement listElement = _Doc.CreateElement("List", _nsm.DefaultNamespace);
@@ -149,6 +168,8 @@ namespace ProviderProxy {
         }
 
         public System.Xml.XmlNode GetListItemChangesSinceToken(string listName, string viewName, System.Xml.XmlNode query, System.Xml.XmlNode viewFields, string rowLimit, System.Xml.XmlNode queryOptions, string changeToken, System.Xml.XmlNode contains) {
+            SetHeaders();
+
             //List name should correspond to the provider ID if the stssync link was constructed correctly.
             const char sTab = '\t';
             System.Diagnostics.Debug.Print("GetListItemChangesSinceToken called with params:\n" +
@@ -228,6 +249,7 @@ namespace ProviderProxy {
 
             XmlElement xelChanges = NewElement(listItems, "Changes", null, true);
             xelChanges.SetAttribute("LastChangeToken", new ChangeKey(1, 3, iProv.ID, DateTime.Now, 1).ToString());
+            xelChanges.AppendChild(GetList(listName));
             Debug.WriteLine(xelChanges.OuterXml);
 
             XmlElement xelDataNode = ListsHelper.DataSetToDataNode(listItems, wssDS, listType, intRowLimit, startRow, requestThread);
