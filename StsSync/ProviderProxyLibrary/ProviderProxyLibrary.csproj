@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="lists.asmx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="lists.asmx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="lists.asmx.cs">
+      <SubType>Component</SubType>
+      <DependentUpon>lists.asmx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

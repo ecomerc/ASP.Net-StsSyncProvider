@@ -76,7 +76,6 @@
     <Compile Include="Contacts.cs" />
     <Compile Include="ContactsDS.cs">
       <DependentUpon>ContactsDS.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ContactsDS.Designer.cs">
       <AutoGen>True</AutoGen>
